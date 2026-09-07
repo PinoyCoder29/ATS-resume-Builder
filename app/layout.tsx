@@ -8,17 +8,25 @@ import BootstrapClient from "@/components/BootstrapClient";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "ATS Resume Builder",
+  title: "ResumeForge PH",
   description:
     "Gumawa ng ATS-friendly resume step by step at i-download bilang PDF.",
+
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={inter.variable}>
         <ResumeProvider>{children}</ResumeProvider>
-        {/* Loads Bootstrap's JS bundle (for things like dropdowns) on the client only */}
+
         <BootstrapClient />
       </body>
     </html>

@@ -13,8 +13,10 @@
   --sage-dark: #37503d;
   --sage-tint: #e7ede7;
   --warn: #a34d3a;
-  --font-ui: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-doc: "Helvetica Neue", Arial, sans-serif; /* ATS-safe font for the resume itself */
+  --font-ui:
+    var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-doc:
+    "Helvetica Neue", Arial, sans-serif; /* ATS-safe font for the resume itself */
 
   --bs-body-font-family: var(--font-ui);
   --bs-body-color: var(--ink);
@@ -98,7 +100,10 @@ body {
   color: var(--ink-soft);
   background: var(--paper-raised);
   flex-shrink: 0;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .step-node.is-done {
@@ -179,7 +184,9 @@ body {
   padding: 1.5rem;
   cursor: pointer;
   background: var(--paper-raised);
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
   height: 100%;
 }
 
