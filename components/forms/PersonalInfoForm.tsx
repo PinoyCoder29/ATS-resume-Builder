@@ -10,14 +10,18 @@ export default function PersonalInfoForm() {
   const info = data.personalInfo;
 
   const canContinue =
-    info.fullName.trim() !== "" && info.email.trim() !== "" && info.phone.trim() !== "";
+    info.fullName.trim() !== "" &&
+    info.email.trim() !== "" &&
+    info.phone.trim() !== "";
 
   return (
     <div className="panel">
       <h2 className="panel-title">Personal Information</h2>
+
       <p className="panel-subtitle">
-        Ito ang lalabas sa taas ng iyong resume. Gamitin ang buong pangalan at aktibong
-        email/number na madali kang ma-contact.
+        This information will appear at the top of your resume. Use your full
+        name and an active email address and phone number where employers can
+        easily reach you.
       </p>
 
       <div className="row g-3">
@@ -29,14 +33,16 @@ export default function PersonalInfoForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Target Job Title"
           value={info.jobTitle}
           onChange={(v) => updatePersonalInfo({ jobTitle: v })}
           placeholder="Customer Service Representative"
           colClass="col-md-6"
-          helpText="Ang position na target mong i-apply-an."
+          helpText="The position you are targeting in your job application."
         />
+
         <TextField
           label="Email Address"
           value={info.email}
@@ -46,6 +52,7 @@ export default function PersonalInfoForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Phone Number"
           value={info.phone}
@@ -54,6 +61,7 @@ export default function PersonalInfoForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Location"
           value={info.location}
@@ -61,6 +69,7 @@ export default function PersonalInfoForm() {
           placeholder="Lipa City, Batangas"
           colClass="col-md-6"
         />
+
         <TextField
           label="LinkedIn (optional)"
           value={info.linkedin ?? ""}
@@ -68,11 +77,12 @@ export default function PersonalInfoForm() {
           placeholder="linkedin.com/in/juandelacruz"
           colClass="col-md-6"
         />
+
         <TextAreaField
           label="Professional Summary"
           value={info.summary}
           onChange={(v) => updatePersonalInfo({ summary: v })}
-          placeholder="2-3 sentences na buod: sino ka, ilang taon ng experience, at ano ang idudulot mo sa employer."
+          placeholder="Write 2–3 sentences summarizing who you are, your experience, and the value you can bring to the employer."
           rows={4}
           colClass="col-12"
         />

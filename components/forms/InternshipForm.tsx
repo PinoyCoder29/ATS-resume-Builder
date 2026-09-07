@@ -33,10 +33,14 @@ export default function InternshipForm() {
 
   return (
     <div className="panel">
-      <h2 className="panel-title">Internship / On-the-Job Training (Optional)</h2>
+      <h2 className="panel-title">
+        Internship / On-the-Job Training (Optional)
+      </h2>
+
       <p className="panel-subtitle">
-        Idagdag kung mayroon kang internship o OJT — kahit saang course applicable ito.
-        Kung wala, i-click na lang ang "Skip this section" sa ibaba.
+        Add your internship or OJT experience if you have one — this section is
+        applicable to any course. If you don't have one, simply click "Skip this
+        section" below.
       </p>
 
       {data.internship.length > 0 && (
@@ -50,16 +54,18 @@ export default function InternshipForm() {
                 <div className="fw-semibold">
                   {intern.position} · {intern.company}
                 </div>
+
                 <div className="text-secondary small">
                   {intern.startDate} – {intern.endDate}
                 </div>
               </div>
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeInternship(intern.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}
@@ -75,6 +81,7 @@ export default function InternshipForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Company / Organization"
           value={draft.company}
@@ -83,6 +90,7 @@ export default function InternshipForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Department (optional)"
           value={draft.department ?? ""}
@@ -90,6 +98,7 @@ export default function InternshipForm() {
           placeholder="Human Resources"
           colClass="col-md-6"
         />
+
         <TextField
           label="Location (optional)"
           value={draft.location ?? ""}
@@ -97,6 +106,7 @@ export default function InternshipForm() {
           placeholder="Lipa City, Batangas"
           colClass="col-md-6"
         />
+
         <TextField
           label="Start Date"
           value={draft.startDate}
@@ -104,6 +114,7 @@ export default function InternshipForm() {
           placeholder="Jan 2025"
           colClass="col-md-6"
         />
+
         <TextField
           label="End Date"
           value={draft.endDate}
@@ -111,16 +122,25 @@ export default function InternshipForm() {
           placeholder="Apr 2025"
           colClass="col-md-6"
         />
+
         <TextAreaField
           label="Responsibilities / Skills Learned"
           value={draft.description}
           onChange={(v) => setDraft((d) => ({ ...d, description: v }))}
-          placeholder={"Isang linya bawat bullet, hal:\nNakatulong sa paghahanda ng monthly reports\nNatutunan ang paggamit ng CRM software"}
+          placeholder={
+            "One bullet point per line, e.g.:\nAssisted in preparing monthly reports\nLearned how to use CRM software"
+          }
           rows={4}
         />
+
         <div className="col-12">
-          <button type="button" className="btn btn-outline-ink" onClick={handleAdd} disabled={!canAdd}>
-            + Idagdag ang Internship na Ito
+          <button
+            type="button"
+            className="btn btn-outline-ink"
+            onClick={handleAdd}
+            disabled={!canAdd}
+          >
+            + Add This Internship
           </button>
         </div>
       </div>

@@ -36,9 +36,9 @@ export default function ProjectsForm() {
     <div className="panel">
       <h2 className="panel-title">Projects (Optional)</h2>
       <p className="panel-subtitle">
-        Kahit anong klaseng project — thesis, feasibility study, classroom project,
-        campaign, design project — pwedeng ilagay dito, hindi lang programming projects.
-        Kung wala kang idadagdag, i-click na lang ang Continue.
+        You can add any type of project here — thesis, feasibility study,
+        classroom project, campaign, design project, or programming project. If
+        you have nothing to add, simply click Continue.
       </p>
 
       {data.projects.length > 0 && (
@@ -59,7 +59,7 @@ export default function ProjectsForm() {
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeProject(proj.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}
@@ -100,7 +100,7 @@ export default function ProjectsForm() {
           label="Description / Contributions"
           value={draft.description}
           onChange={(v) => setDraft((d) => ({ ...d, description: v }))}
-          placeholder="Ilarawan ang project, ang ginawa mo, at ang resulta o outcome."
+          placeholder="Describe the project, your contributions, and the results or outcomes."
           rows={4}
         />
         <TextField
@@ -118,8 +118,13 @@ export default function ProjectsForm() {
           colClass="col-md-6"
         />
         <div className="col-12">
-          <button type="button" className="btn btn-outline-ink" onClick={handleAdd} disabled={!canAdd}>
-            + Idagdag ang Project na Ito
+          <button
+            type="button"
+            className="btn btn-outline-ink"
+            onClick={handleAdd}
+            disabled={!canAdd}
+          >
+            + Add This Project
           </button>
         </div>
       </div>

@@ -11,42 +11,55 @@ export default function ExperienceQuestion() {
 
   return (
     <div className="panel">
-      <h2 className="panel-title">May Trabaho Ka Na Ba Dati?</h2>
+      <h2 className="panel-title">Do You Have Work Experience?</h2>
+
       <p className="panel-subtitle">
-        Ito ang magdedesisyon kung anong mga section ang ipapakita sa susunod. Walang mali
-        o tamang sagot — may template na angkop sa dalawang sitwasyon.
+        This will determine which sections are shown next. There is no right or
+        wrong answer — the template is designed to fit both situations.
       </p>
 
       <div className="row g-3">
         <div className="col-md-6">
           <div
             role="button"
-            className={`choice-card ${data.hasExperience === "yes" ? "is-selected" : ""}`}
+            className={`choice-card ${
+              data.hasExperience === "yes" ? "is-selected" : ""
+            }`}
             onClick={() => choose("yes")}
           >
-            <div className="choice-title">Meron akong work experience</div>
+            <div className="choice-title">I have work experience</div>
+
             <div className="choice-desc">
-              Kasama ang mga dating trabaho, part-time, freelance, o internship. Magdadagdag
-              ka ng isa o higit pang entry sa susunod na hakbang.
+              Includes previous jobs, part-time work, freelance work, or
+              internships. You can add one or more entries in the next step.
             </div>
           </div>
         </div>
+
         <div className="col-md-6">
           <div
             role="button"
-            className={`choice-card ${data.hasExperience === "no" ? "is-selected" : ""}`}
+            className={`choice-card ${
+              data.hasExperience === "no" ? "is-selected" : ""
+            }`}
             onClick={() => choose("no")}
           >
-            <div className="choice-title">Wala pa akong work experience</div>
+            <div className="choice-title">I don't have work experience</div>
+
             <div className="choice-desc">
-              Fresh graduate o unang trabaho pa lang ang hinahanap. Lalaktawan natin ang
-              work history at bibigyang-diin ang education, skills, at training.
+              You're a fresh graduate or looking for your first job. We'll skip
+              the work history section and focus on your education, skills, and
+              training.
             </div>
           </div>
         </div>
       </div>
 
-      <FormNav onBack={goBack} onNext={goNext} nextDisabled={data.hasExperience === null} />
+      <FormNav
+        onBack={goBack}
+        onNext={goNext}
+        nextDisabled={data.hasExperience === null}
+      />
     </div>
   );
 }

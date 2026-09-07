@@ -21,7 +21,9 @@ export default function ExperienceForm() {
   const [draft, setDraft] = useState(emptyDraft);
 
   const canAdd =
-    draft.company.trim() !== "" && draft.position.trim() !== "" && draft.startDate.trim() !== "";
+    draft.company.trim() !== "" &&
+    draft.position.trim() !== "" &&
+    draft.startDate.trim() !== "";
 
   const handleAdd = () => {
     if (!canAdd) return;
@@ -34,28 +36,36 @@ export default function ExperienceForm() {
   return (
     <div className="panel">
       <h2 className="panel-title">Work Experience</h2>
+
       <p className="panel-subtitle">
-        Idagdag ang mga trabaho mo, pinakabago muna. Gumamit ng action verbs at, kung
-        pwede, maglagay ng numbers/results sa description (hal. "Nag-process ng 50+ orders
-        araw-araw").
+        Add your work experience, starting with your most recent position. Use
+        action verbs and, when possible, include numbers or measurable results
+        in your description (e.g., "Processed 50+ orders daily").
       </p>
 
       {data.experience.length > 0 && (
         <div className="mb-4">
           {data.experience.map((exp) => (
-            <div className="entry-row d-flex justify-content-between align-items-start" key={exp.id}>
+            <div
+              className="entry-row d-flex justify-content-between align-items-start"
+              key={exp.id}
+            >
               <div>
-                <div className="fw-semibold">{exp.position} · {exp.company}</div>
+                <div className="fw-semibold">
+                  {exp.position} · {exp.company}
+                </div>
+
                 <div className="text-secondary small">
                   {exp.startDate} – {exp.endDate}
                 </div>
               </div>
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeExperience(exp.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}
@@ -71,6 +81,7 @@ export default function ExperienceForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Job Title"
           value={draft.position}
@@ -79,6 +90,7 @@ export default function ExperienceForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Start Date"
           value={draft.startDate}
@@ -87,6 +99,7 @@ export default function ExperienceForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="End Date"
           value={draft.endDate}
@@ -94,16 +107,25 @@ export default function ExperienceForm() {
           placeholder="Present"
           colClass="col-md-6"
         />
+
         <TextAreaField
           label="Key Responsibilities / Achievements"
           value={draft.description}
           onChange={(v) => setDraft((d) => ({ ...d, description: v }))}
-          placeholder={"Isang linya bawat bullet, hal:\nNag-handle ng 30+ customer inquiries kada shift\nNakatulong mapataas ang sales ng 15% sa Q2"}
+          placeholder={
+            "One bullet point per line, e.g.:\nHandled 30+ customer inquiries per shift\nHelped increase sales by 15% in Q2"
+          }
           rows={4}
         />
+
         <div className="col-12">
-          <button type="button" className="btn btn-outline-ink" onClick={handleAdd} disabled={!canAdd}>
-            + Idagdag ang Experience na Ito
+          <button
+            type="button"
+            className="btn btn-outline-ink"
+            onClick={handleAdd}
+            disabled={!canAdd}
+          >
+            + Add This Experience
           </button>
         </div>
       </div>
