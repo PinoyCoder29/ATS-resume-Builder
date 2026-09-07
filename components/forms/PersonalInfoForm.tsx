@@ -66,7 +66,7 @@ export default function PersonalInfoForm() {
           label="Location"
           value={info.location}
           onChange={(v) => updatePersonalInfo({ location: v })}
-          placeholder="Lipa City, Batangas"
+          placeholder="Sariaya, Quezon Province"
           colClass="col-md-6"
         />
 
