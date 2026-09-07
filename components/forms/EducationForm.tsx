@@ -34,27 +34,33 @@ export default function EducationForm() {
   return (
     <div className="panel">
       <h2 className="panel-title">Education</h2>
+
       <p className="panel-subtitle">
-        Ilagay ang pinakamataas o pinakahuling natapos mong programa muna. Kung fresh
-        graduate ka, pwede ring idagdag ang relevant coursework o thesis title.
+        Enter your highest or most recently completed program first. If you are
+        a fresh graduate, you can also add relevant coursework or your thesis
+        title.
       </p>
 
       {data.education.length > 0 && (
         <div className="mb-4">
           {data.education.map((edu) => (
-            <div className="entry-row d-flex justify-content-between align-items-start" key={edu.id}>
+            <div
+              className="entry-row d-flex justify-content-between align-items-start"
+              key={edu.id}
+            >
               <div>
                 <div className="fw-semibold">{edu.degree}</div>
                 <div className="text-secondary small">
                   {edu.school} · {edu.startDate} – {edu.endDate}
                 </div>
               </div>
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeEducation(edu.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}
@@ -70,6 +76,7 @@ export default function EducationForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Degree / Program"
           value={draft.degree}
@@ -78,6 +85,7 @@ export default function EducationForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Start Year"
           value={draft.startDate}
@@ -85,6 +93,7 @@ export default function EducationForm() {
           placeholder="2021"
           colClass="col-md-4"
         />
+
         <TextField
           label="End Year"
           value={draft.endDate}
@@ -92,24 +101,32 @@ export default function EducationForm() {
           placeholder="2025"
           colClass="col-md-4"
         />
+
         <TextField
           label="Honors (optional)"
           value={draft.honors ?? ""}
           onChange={(v) => setDraft((d) => ({ ...d, honors: v }))}
-          placeholder="Cum Laude, Dean's Lister"
+          placeholder="Cum Laude, Dean's List"
           colClass="col-md-4"
         />
+
         <TextAreaField
           label="Education Summary (optional)"
           value={draft.summary ?? ""}
           onChange={(v) => setDraft((d) => ({ ...d, summary: v }))}
-          placeholder="Maikling ilarawan ang specialization, natutunan, academic achievements, o relevant na ginawa habang nag-aaral."
+          placeholder="Briefly describe your specialization, skills learned, academic achievements, or relevant work completed during your studies."
           rows={3}
           colClass="col-12"
         />
+
         <div className="col-12">
-          <button type="button" className="btn btn-outline-ink" onClick={handleAdd} disabled={!canAdd}>
-            + Idagdag ang Education na Ito
+          <button
+            type="button"
+            className="btn btn-outline-ink"
+            onClick={handleAdd}
+            disabled={!canAdd}
+          >
+            + Add This Education
           </button>
         </div>
       </div>
