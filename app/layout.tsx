@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { ResumeProvider } from "@/context/ResumeContext";
 import BootstrapClient from "@/components/BootstrapClient";
 
