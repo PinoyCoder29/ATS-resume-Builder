@@ -45,14 +45,30 @@ export default function Home() {
 
       <main className="container py-4 py-md-5 flex-grow-1">
         <div className="mb-4">
-          <StepIndicator steps={visibleSteps} currentStep={currentStep} onStepClick={goToStep} />
+          <StepIndicator
+            steps={visibleSteps}
+            currentStep={currentStep}
+            onStepClick={goToStep}
+          />
         </div>
 
         <StepComponent />
       </main>
 
-      <footer className="text-center text-secondary small py-4">
-        Gawa gamit ang Next.js, TypeScript, at Bootstrap.
+      <footer className="app-footer">
+        <div className="container">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div className="d-flex align-items-center gap-2">
+              <span className="brand-mark">RB</span>
+              <span className="fw-semibold">ATS Resume Builder</span>
+            </div>
+
+            <span className="text-secondary small">
+              © {new Date().getFullYear()} ATS Resume Builder. All rights
+              reserved.
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );
