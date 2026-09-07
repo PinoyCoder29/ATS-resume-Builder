@@ -37,12 +37,11 @@ export default function Home() {
       <header className="app-header py-3">
         <div className="container">
           <div className="d-flex align-items-center gap-2">
-            <span className="brand-mark">RB</span>
-            <span className="brand-name">ATS Resume Builder</span>
+            <span className="brand-mark">RF</span>
+            <span className="fw-semibold">RESUME FORGE PH</span>
           </div>
         </div>
       </header>
-
       <main className="container py-4 py-md-5 flex-grow-1">
         <div className="mb-4">
           <StepIndicator
@@ -54,19 +53,23 @@ export default function Home() {
 
         <StepComponent />
       </main>
-
-      <footer className="app-footer">
+      <footer className="border-top bg-white py-4 mt-5">
         <div className="container">
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-            <div className="d-flex align-items-center gap-2">
-              <span className="brand-mark">RB</span>
-              <span className="fw-semibold">ATS Resume Builder</span>
+          <div className="row align-items-center gy-3">
+            <div className="col-md-6 text-center text-md-start">
+              <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                <span className="badge bg-dark rounded-2 px-2 py-2">RF</span>
+
+                <span className="fw-semibold">RESUME FORGE PH</span>
+              </div>
             </div>
 
-            <span className="text-secondary small">
-              © {new Date().getFullYear()} ATS Resume Builder. All rights
-              reserved.
-            </span>
+            <div className="col-md-6 text-center text-md-end">
+              <small className="text-secondary">
+                © {new Date().getFullYear()} Resume Forge PH. All rights
+                reserved.
+              </small>
+            </div>
           </div>
         </div>
       </footer>
