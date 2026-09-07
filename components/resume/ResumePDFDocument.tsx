@@ -112,7 +112,6 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
     technical: skills.filter((s) => s.category === "technical"),
     soft: skills.filter((s) => s.category === "soft"),
     language: skills.filter((s) => s.category === "language"),
-    certification: skills.filter((s) => s.category === "certification"),
   };
 
   return (
@@ -144,7 +143,9 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
                     {exp.startDate} – {exp.endDate}
                   </Text>
                 </View>
-                {exp.location ? <Text style={styles.entrySub}>{exp.location}</Text> : null}
+                {exp.location ? (
+                  <Text style={styles.entrySub}>{exp.location}</Text>
+                ) : null}
                 {bulletsFromDescription(exp.description).map((line, i) => (
                   <View style={styles.bulletRow} key={i}>
                     <Text style={styles.bulletDot}>•</Text>
@@ -171,7 +172,9 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
                 </View>
                 {intern.department || intern.location ? (
                   <Text style={styles.entrySub}>
-                    {[intern.department, intern.location].filter(Boolean).join(" · ")}
+                    {[intern.department, intern.location]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </Text>
                 ) : null}
                 {bulletsFromDescription(intern.description).map((line, i) => (
@@ -200,7 +203,9 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
                   {edu.school}
                   {edu.honors ? `  ·  ${edu.honors}` : ""}
                 </Text>
-                {edu.summary ? <Text style={styles.paragraph}>{edu.summary}</Text> : null}
+                {edu.summary ? (
+                  <Text style={styles.paragraph}>{edu.summary}</Text>
+                ) : null}
               </View>
             ))}
           </View>
@@ -211,22 +216,20 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
             <Text style={styles.sectionTitle}>Skills</Text>
             {skillsByCategory.technical.length > 0 && (
               <Text style={styles.skillsLine}>
-                Technical: {skillsByCategory.technical.map((s) => s.name).join(", ")}
+                Technical:{" "}
+                {skillsByCategory.technical.map((s) => s.name).join(", ")}
               </Text>
             )}
             {skillsByCategory.soft.length > 0 && (
               <Text style={styles.skillsLine}>
-                Soft Skills: {skillsByCategory.soft.map((s) => s.name).join(", ")}
+                Soft Skills:{" "}
+                {skillsByCategory.soft.map((s) => s.name).join(", ")}
               </Text>
             )}
             {skillsByCategory.language.length > 0 && (
               <Text style={styles.skillsLine}>
-                Languages: {skillsByCategory.language.map((s) => s.name).join(", ")}
-              </Text>
-            )}
-            {skillsByCategory.certification.length > 0 && (
-              <Text style={styles.skillsLine}>
-                Certifications: {skillsByCategory.certification.map((s) => s.name).join(", ")}
+                Languages:{" "}
+                {skillsByCategory.language.map((s) => s.name).join(", ")}
               </Text>
             )}
           </View>
@@ -239,7 +242,9 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
               <View key={proj.id} style={styles.entryBlock} wrap={false}>
                 <View style={styles.entryTitleRow}>
                   <Text style={styles.entryTitle}>{proj.name}</Text>
-                  {proj.date ? <Text style={styles.entryDates}>{proj.date}</Text> : null}
+                  {proj.date ? (
+                    <Text style={styles.entryDates}>{proj.date}</Text>
+                  ) : null}
                 </View>
                 {proj.role || proj.organization ? (
                   <Text style={styles.entrySub}>
@@ -250,7 +255,9 @@ export default function ResumePDFDocument({ data }: { data: ResumeData }) {
                   <Text style={styles.paragraph}>{proj.description}</Text>
                 ) : null}
                 {proj.skillsUsed ? (
-                  <Text style={styles.skillsLine}>Skills/Tools: {proj.skillsUsed}</Text>
+                  <Text style={styles.skillsLine}>
+                    Skills/Tools: {proj.skillsUsed}
+                  </Text>
                 ) : null}
               </View>
             ))}

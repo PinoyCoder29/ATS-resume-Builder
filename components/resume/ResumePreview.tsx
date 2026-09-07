@@ -34,13 +34,14 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
     technical: skills.filter((s) => s.category === "technical"),
     soft: skills.filter((s) => s.category === "soft"),
     language: skills.filter((s) => s.category === "language"),
-    certification: skills.filter((s) => s.category === "certification"),
   };
 
   return (
     <div className="resume-preview">
       <h1>{personalInfo.fullName || "Your Name"}</h1>
-      {personalInfo.jobTitle && <div className="resume-title">{personalInfo.jobTitle}</div>}
+      {personalInfo.jobTitle && (
+        <div className="resume-title">{personalInfo.jobTitle}</div>
+      )}
       {contactParts.length > 0 && (
         <div className="resume-contact">{contactParts.join("  |  ")}</div>
       )}
@@ -65,7 +66,9 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                   {exp.startDate} – {exp.endDate}
                 </span>
               </div>
-              {exp.location && <div className="resume-entry-sub">{exp.location}</div>}
+              {exp.location && (
+                <div className="resume-entry-sub">{exp.location}</div>
+              )}
               {bulletsFromDescription(exp.description).length > 0 && (
                 <ul>
                   {bulletsFromDescription(exp.description).map((line, i) => (
@@ -93,7 +96,9 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
               </div>
               {(intern.department || intern.location) && (
                 <div className="resume-entry-sub">
-                  {[intern.department, intern.location].filter(Boolean).join(" · ")}
+                  {[intern.department, intern.location]
+                    .filter(Boolean)
+                    .join(" · ")}
                 </div>
               )}
               {bulletsFromDescription(intern.description).length > 0 && (
@@ -124,7 +129,9 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
                 {edu.honors ? `  ·  ${edu.honors}` : ""}
               </div>
               {edu.summary && (
-                <p style={{ fontSize: "0.82rem", marginTop: "0.2rem" }}>{edu.summary}</p>
+                <p style={{ fontSize: "0.82rem", marginTop: "0.2rem" }}>
+                  {edu.summary}
+                </p>
               )}
             </div>
           ))}
@@ -136,23 +143,20 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
           <div className="resume-section-title">Skills</div>
           {skillsByCategory.technical.length > 0 && (
             <p style={{ fontSize: "0.82rem", marginBottom: "0.3rem" }}>
-              <strong>Technical:</strong> {skillsByCategory.technical.map((s) => s.name).join(", ")}
+              <strong>Technical:</strong>{" "}
+              {skillsByCategory.technical.map((s) => s.name).join(", ")}
             </p>
           )}
           {skillsByCategory.soft.length > 0 && (
             <p style={{ fontSize: "0.82rem", marginBottom: "0.3rem" }}>
-              <strong>Soft Skills:</strong> {skillsByCategory.soft.map((s) => s.name).join(", ")}
+              <strong>Soft Skills:</strong>{" "}
+              {skillsByCategory.soft.map((s) => s.name).join(", ")}
             </p>
           )}
           {skillsByCategory.language.length > 0 && (
             <p style={{ fontSize: "0.82rem", marginBottom: "0.3rem" }}>
-              <strong>Languages:</strong> {skillsByCategory.language.map((s) => s.name).join(", ")}
-            </p>
-          )}
-          {skillsByCategory.certification.length > 0 && (
-            <p style={{ fontSize: "0.82rem", marginBottom: "0.3rem" }}>
-              <strong>Certifications:</strong>{" "}
-              {skillsByCategory.certification.map((s) => s.name).join(", ")}
+              <strong>Languages:</strong>{" "}
+              {skillsByCategory.language.map((s) => s.name).join(", ")}
             </p>
           )}
         </>
@@ -165,7 +169,9 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
             <div key={proj.id} className="mb-2">
               <div className="d-flex justify-content-between">
                 <span className="resume-entry-title">{proj.name}</span>
-                {proj.date && <span className="resume-entry-sub mb-0">{proj.date}</span>}
+                {proj.date && (
+                  <span className="resume-entry-sub mb-0">{proj.date}</span>
+                )}
               </div>
               {(proj.role || proj.organization) && (
                 <div className="resume-entry-sub">
@@ -193,7 +199,9 @@ export default function ResumePreview({ data }: { data: ResumeData }) {
               <div className="d-flex justify-content-between">
                 <span className="resume-entry-title">{cert.name}</span>
                 {cert.issueDate && (
-                  <span className="resume-entry-sub mb-0">{cert.issueDate}</span>
+                  <span className="resume-entry-sub mb-0">
+                    {cert.issueDate}
+                  </span>
                 )}
               </div>
               <div className="resume-entry-sub">
