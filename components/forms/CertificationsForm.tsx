@@ -39,7 +39,8 @@ export default function CertificationsForm() {
   const [certDraft, setCertDraft] = useState(emptyCertDraft);
   const [trainingDraft, setTrainingDraft] = useState(emptyTrainingDraft);
 
-  const canAddCert = certDraft.name.trim() !== "" && certDraft.issuer.trim() !== "";
+  const canAddCert =
+    certDraft.name.trim() !== "" && certDraft.issuer.trim() !== "";
   const canAddTraining = trainingDraft.name.trim() !== "";
 
   const handleAddCert = () => {
@@ -58,8 +59,9 @@ export default function CertificationsForm() {
     <div className="panel">
       <h2 className="panel-title">Certifications &amp; Training (Optional)</h2>
       <p className="panel-subtitle">
-        Applicable sa lahat ng field — accounting, engineering, healthcare, atbp. Kung
-        wala kang certifications o trainings, i-click na lang ang Continue.
+        Applicable sa lahat ng field — accounting, engineering, healthcare,
+        atbp. Kung wala kang certifications o trainings, i-click na lang ang
+        Continue.
       </p>
 
       <h3 className="h6 fw-semibold mt-2">Certifications</h3>
@@ -81,7 +83,7 @@ export default function CertificationsForm() {
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeCertification(cert.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}
@@ -155,7 +157,9 @@ export default function CertificationsForm() {
               <div>
                 <div className="fw-semibold">{training.name}</div>
                 <div className="text-secondary small">
-                  {[training.provider, training.date].filter(Boolean).join(" · ")}
+                  {[training.provider, training.date]
+                    .filter(Boolean)
+                    .join(" · ")}
                 </div>
               </div>
               <button
@@ -163,7 +167,7 @@ export default function CertificationsForm() {
                 className="btn btn-sm btn-outline-danger"
                 onClick={() => removeTraining(training.id)}
               >
-                Alisin
+                Remove
               </button>
             </div>
           ))}

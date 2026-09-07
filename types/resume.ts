@@ -78,7 +78,7 @@ export interface TrainingEntry {
   description?: string;
 }
 
-export type SkillCategory = "technical" | "soft" | "language" | "certification";
+export type SkillCategory = "technical" | "soft" | "language";
 
 export interface SkillEntry {
   id: string;
