@@ -1,0 +1,319 @@
+/* ---------------------------------------------------------------------
+   Design tokens
+   Palette: deep ink navy + warm paper + muted sage accent.
+   Deliberately avoiding the generic cream/terracotta AI-page look.
+--------------------------------------------------------------------- */
+:root {
+  --ink: #16233d;
+  --ink-soft: #3c4a63;
+  --paper: #f6f4ef;
+  --paper-raised: #ffffff;
+  --line: #dcd7ca;
+  --sage: #4b6b53;
+  --sage-dark: #37503d;
+  --sage-tint: #e7ede7;
+  --warn: #a34d3a;
+  --font-ui: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-doc: "Helvetica Neue", Arial, sans-serif; /* ATS-safe font for the resume itself */
+
+  --bs-body-font-family: var(--font-ui);
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--paper);
+  --bs-primary: #16233d;
+  --bs-primary-rgb: 22, 35, 61;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+
+/* ---------------------------------------------------------------------
+   Layout chrome
+--------------------------------------------------------------------- */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-raised);
+}
+
+.app-header .brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--paper-raised);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.app-header .brand-name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------
+   Step indicator (progress rail)
+--------------------------------------------------------------------- */
+.step-rail {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.step-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.step-node {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--paper-raised);
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.step-node.is-done {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+}
+
+.step-node.is-current {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.step-label {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.step-label.is-current {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.step-connector {
+  width: 28px;
+  height: 1.5px;
+  background: var(--line);
+  flex-shrink: 0;
+  margin: 0 0.35rem;
+}
+
+/* ---------------------------------------------------------------------
+   Cards / form panels
+--------------------------------------------------------------------- */
+.panel {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+}
+
+.panel-subtitle {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  margin-bottom: 1.75rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.form-control,
+.form-select {
+  border-color: var(--line);
+  padding: 0.55rem 0.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(22, 35, 61, 0.08);
+}
+
+/* Branch choice cards (meron / walang experience) */
+.choice-card {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  background: var(--paper-raised);
+  transition: border-color 0.15s ease, background 0.15s ease;
+  height: 100%;
+}
+
+.choice-card:hover {
+  border-color: var(--ink-soft);
+}
+
+.choice-card.is-selected {
+  border-color: var(--sage);
+  background: var(--sage-tint);
+}
+
+.choice-card .choice-title {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.choice-card .choice-desc {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+/* Entry rows (experience/education items already added) */
+.entry-row {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  background: var(--paper);
+}
+
+.entry-row + .entry-row {
+  margin-top: 0.75rem;
+}
+
+/* Buttons */
+.btn-ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.btn-ink:hover {
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
+  color: #fff;
+}
+
+.btn-outline-ink {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.btn-outline-ink:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn-sage {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+}
+
+.btn-sage:hover {
+  background: var(--sage-dark);
+  border-color: var(--sage-dark);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------
+   Resume preview (on-screen mirror of the PDF)
+--------------------------------------------------------------------- */
+.resume-preview {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 2.5rem;
+  font-family: var(--font-doc);
+  color: #1a1a1a;
+  min-height: 900px;
+}
+
+.resume-preview h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.resume-preview .resume-title {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.resume-preview .resume-contact {
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 1.25rem;
+}
+
+.resume-preview .resume-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1.5px solid #1a1a1a;
+  padding-bottom: 0.2rem;
+  margin: 1.25rem 0 0.6rem;
+}
+
+.resume-preview .resume-entry-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.resume-preview .resume-entry-sub {
+  font-size: 0.82rem;
+  color: #444;
+  margin-bottom: 0.3rem;
+}
+
+.resume-preview ul {
+  font-size: 0.82rem;
+  padding-left: 1.1rem;
+  margin-bottom: 0.6rem;
+}
+
+/* ---------------------------------------------------------------------
+   Responsive
+--------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .panel {
+    padding: 1.25rem;
+  }
+  .resume-preview {
+    padding: 1.25rem;
+  }
+}
