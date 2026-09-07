@@ -25,6 +25,7 @@ export default function PersonalInfoForm() {
       </p>
 
       <div className="row g-3">
+        {/* Full Name */}
         <TextField
           label="Full Name"
           value={info.fullName}
@@ -34,6 +35,7 @@ export default function PersonalInfoForm() {
           colClass="col-md-6"
         />
 
+        {/* Target Job Title */}
         <TextField
           label="Target Job Title"
           value={info.jobTitle}
@@ -43,6 +45,7 @@ export default function PersonalInfoForm() {
           helpText="The position you are targeting in your job application."
         />
 
+        {/* Email */}
         <TextField
           label="Email Address"
           value={info.email}
@@ -53,6 +56,7 @@ export default function PersonalInfoForm() {
           colClass="col-md-6"
         />
 
+        {/* Phone */}
         <TextField
           label="Phone Number"
           value={info.phone}
@@ -62,6 +66,7 @@ export default function PersonalInfoForm() {
           colClass="col-md-6"
         />
 
+        {/* Location */}
         <TextField
           label="Location"
           value={info.location}
@@ -70,6 +75,7 @@ export default function PersonalInfoForm() {
           colClass="col-md-6"
         />
 
+        {/* LinkedIn */}
         <TextField
           label="LinkedIn (optional)"
           value={info.linkedin ?? ""}
@@ -78,6 +84,27 @@ export default function PersonalInfoForm() {
           colClass="col-md-6"
         />
 
+        {/* GitHub */}
+        <TextField
+          label="GitHub (optional)"
+          value={info.github ?? ""}
+          onChange={(v) => updatePersonalInfo({ github: v })}
+          placeholder="github.com/juandelacruz"
+          colClass="col-md-6"
+          helpText="Add your GitHub profile to showcase your projects and code."
+        />
+
+        {/* Portfolio */}
+        <TextField
+          label="Portfolio Website (optional)"
+          value={info.portfolio ?? ""}
+          onChange={(v) => updatePersonalInfo({ portfolio: v })}
+          placeholder="juandelacruz.dev"
+          colClass="col-md-6"
+          helpText="Your personal website, portfolio, or project showcase."
+        />
+
+        {/* Professional Summary */}
         <TextAreaField
           label="Professional Summary"
           value={info.summary}
