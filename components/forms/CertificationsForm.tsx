@@ -23,9 +23,8 @@ const emptyTrainingDraft: Omit<TrainingEntry, "id"> = {
   description: "",
 };
 
-// Combines two related, always-optional sections into one step:
-// professional certifications (with credential IDs) and shorter
-// trainings/workshops/seminars.
+// Combines two optional sections into one step:
+// professional certifications and shorter trainings/workshops/seminars.
 export default function CertificationsForm() {
   const {
     data,
@@ -36,35 +35,49 @@ export default function CertificationsForm() {
     goNext,
     goBack,
   } = useResume();
+
   const [certDraft, setCertDraft] = useState(emptyCertDraft);
   const [trainingDraft, setTrainingDraft] = useState(emptyTrainingDraft);
 
   const canAddCert =
     certDraft.name.trim() !== "" && certDraft.issuer.trim() !== "";
+
   const canAddTraining = trainingDraft.name.trim() !== "";
 
   const handleAddCert = () => {
     if (!canAddCert) return;
-    addCertification({ id: crypto.randomUUID(), ...certDraft });
+
+    addCertification({
+      id: crypto.randomUUID(),
+      ...certDraft,
+    });
+
     setCertDraft(emptyCertDraft);
   };
 
   const handleAddTraining = () => {
     if (!canAddTraining) return;
-    addTraining({ id: crypto.randomUUID(), ...trainingDraft });
+
+    addTraining({
+      id: crypto.randomUUID(),
+      ...trainingDraft,
+    });
+
     setTrainingDraft(emptyTrainingDraft);
   };
 
   return (
     <div className="panel">
       <h2 className="panel-title">Certifications &amp; Training (Optional)</h2>
+
       <p className="panel-subtitle">
-        Applicable sa lahat ng field — accounting, engineering, healthcare,
-        atbp. Kung wala kang certifications o trainings, i-click na lang ang
-        Continue.
+        Add any relevant certifications, trainings, workshops, or seminars. If
+        you do not have any, you can simply click Continue.
       </p>
 
+      {/* Certifications */}
       <h3 className="h6 fw-semibold mt-2">Certifications</h3>
+
       {data.certifications.length > 0 && (
         <div className="mb-3">
           {data.certifications.map((cert) => (
@@ -74,10 +87,12 @@ export default function CertificationsForm() {
             >
               <div>
                 <div className="fw-semibold">{cert.name}</div>
+
                 <div className="text-secondary small">
                   {[cert.issuer, cert.issueDate].filter(Boolean).join(" · ")}
                 </div>
               </div>
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
@@ -89,6 +104,7 @@ export default function CertificationsForm() {
           ))}
         </div>
       )}
+
       <div className="row g-3 border-top pt-3 mb-4">
         <TextField
           label="Certification Name"
@@ -98,6 +114,7 @@ export default function CertificationsForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Issuing Organization"
           value={certDraft.issuer}
@@ -106,6 +123,7 @@ export default function CertificationsForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Issue Date (optional)"
           value={certDraft.issueDate ?? ""}
@@ -113,6 +131,7 @@ export default function CertificationsForm() {
           placeholder="Mar 2024"
           colClass="col-md-4"
         />
+
         <TextField
           label="Expiration Date (optional)"
           value={certDraft.expirationDate ?? ""}
@@ -120,6 +139,7 @@ export default function CertificationsForm() {
           placeholder="Mar 2027"
           colClass="col-md-4"
         />
+
         <TextField
           label="Credential ID (optional)"
           value={certDraft.credentialId ?? ""}
@@ -127,13 +147,15 @@ export default function CertificationsForm() {
           placeholder="ABC-12345"
           colClass="col-md-4"
         />
+
         <TextField
           label="Credential URL (optional)"
           value={certDraft.credentialUrl ?? ""}
           onChange={(v) => setCertDraft((d) => ({ ...d, credentialUrl: v }))}
-          placeholder="credential.link/abc123"
+          placeholder="https://credential.example.com/abc123"
           colClass="col-md-12"
         />
+
         <div className="col-12">
           <button
             type="button"
@@ -141,12 +163,14 @@ export default function CertificationsForm() {
             onClick={handleAddCert}
             disabled={!canAddCert}
           >
-            + Idagdag ang Certification na Ito
+            + Add This Certification
           </button>
         </div>
       </div>
 
+      {/* Training & Workshops */}
       <h3 className="h6 fw-semibold mt-2">Training &amp; Workshops</h3>
+
       {data.trainings.length > 0 && (
         <div className="mb-3">
           {data.trainings.map((training) => (
@@ -156,12 +180,14 @@ export default function CertificationsForm() {
             >
               <div>
                 <div className="fw-semibold">{training.name}</div>
+
                 <div className="text-secondary small">
                   {[training.provider, training.date]
                     .filter(Boolean)
                     .join(" · ")}
                 </div>
               </div>
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
@@ -173,6 +199,7 @@ export default function CertificationsForm() {
           ))}
         </div>
       )}
+
       <div className="row g-3 border-top pt-3">
         <TextField
           label="Training / Workshop Name"
@@ -182,6 +209,7 @@ export default function CertificationsForm() {
           required
           colClass="col-md-6"
         />
+
         <TextField
           label="Provider (optional)"
           value={trainingDraft.provider ?? ""}
@@ -189,6 +217,7 @@ export default function CertificationsForm() {
           placeholder="DOLE"
           colClass="col-md-6"
         />
+
         <TextField
           label="Date (optional)"
           value={trainingDraft.date ?? ""}
@@ -196,13 +225,15 @@ export default function CertificationsForm() {
           placeholder="Aug 2024"
           colClass="col-md-6"
         />
+
         <TextAreaField
           label="Description (optional)"
           value={trainingDraft.description ?? ""}
           onChange={(v) => setTrainingDraft((d) => ({ ...d, description: v }))}
-          placeholder="Maikling detalye tungkol sa training."
+          placeholder="Briefly describe the training, workshop, or seminar."
           rows={2}
         />
+
         <div className="col-12">
           <button
             type="button"
@@ -210,7 +241,7 @@ export default function CertificationsForm() {
             onClick={handleAddTraining}
             disabled={!canAddTraining}
           >
-            + Idagdag ang Training na Ito
+            + Add This Training
           </button>
         </div>
       </div>
