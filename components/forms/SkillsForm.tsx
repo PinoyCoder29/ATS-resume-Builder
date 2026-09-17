@@ -8,7 +8,6 @@ import {
   CATEGORY_PLACEHOLDERS,
   SkillCategoryName,
 } from "@/data/skillCategories";
-import { SkillCategory } from "@/types/resume";
 
 export default function SkillsForm() {
   const { data, addSkill, removeSkill, goNext, goBack } = useResume();
@@ -38,12 +37,10 @@ export default function SkillsForm() {
       return;
     }
 
-    const category: SkillCategory = categoryName;
-
     addSkill({
       id: crypto.randomUUID(),
       name: trimmedName,
-      category,
+      category: categoryName as any,
     });
   };
 
@@ -155,11 +152,13 @@ export default function SkillsForm() {
           <div className="border rounded p-3">
             {Object.entries(
               skills.reduce((groups: Record<string, typeof skills>, skill) => {
-                if (!groups[skill.category]) {
-                  groups[skill.category] = [];
+                const category = String(skill.category);
+
+                if (!groups[category]) {
+                  groups[category] = [];
                 }
 
-                groups[skill.category].push(skill);
+                groups[category].push(skill);
 
                 return groups;
               }, {}),
