@@ -1,24 +1,4 @@
-import { SkillCategory } from "@/types/resume";
-
-export const CATEGORY_LABELS: Record<SkillCategory, string> = {
-  technical: "Technical / Professional",
-  soft: "Soft Skills",
-  language: "Languages",
-};
-
-export const CATEGORY_PLACEHOLDERS: Record<SkillCategory, string> = {
-  technical: "e.g. React, Next.js, PostgreSQL",
-  soft: "e.g. Communication, Leadership",
-  language: "e.g. English, Filipino, Japanese",
-};
-
-/*
-|--------------------------------------------------------------------------
-| Technical Skill Groups
-|--------------------------------------------------------------------------
-*/
-
-export const TECHNICAL_SKILL_GROUPS = {
+export const SKILL_CATEGORIES = {
   "Frontend Development": [
     "React",
     "Next.js",
@@ -98,18 +78,8 @@ export const TECHNICAL_SKILL_GROUPS = {
   ],
 
   Design: ["Adobe Photoshop", "Canva", "UI/UX Design"],
-} as const;
 
-/*
-|--------------------------------------------------------------------------
-| General Quick Examples
-|--------------------------------------------------------------------------
-*/
-
-export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
-  technical: Object.values(TECHNICAL_SKILL_GROUPS).flat(),
-
-  soft: [
+  "Soft Skills": [
     "Communication",
     "Leadership",
     "Teamwork",
@@ -127,7 +97,7 @@ export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
     "Fast Learning",
   ],
 
-  language: [
+  Languages: [
     "English",
     "Filipino",
     "Japanese",
@@ -137,4 +107,40 @@ export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
     "German",
     "French",
   ],
+
+  Technical: [],
+} as const;
+
+export type SkillCategoryName = keyof typeof SKILL_CATEGORIES;
+
+export const CATEGORY_PLACEHOLDERS: Record<SkillCategoryName, string> = {
+  "Frontend Development": "e.g. React, Next.js, Bootstrap",
+
+  "Backend Development": "e.g. Node.js, Express.js, FastAPI",
+
+  "Databases & ORM": "e.g. PostgreSQL, MySQL, Prisma ORM",
+
+  "Cloud & Deployment": "e.g. Vercel, AWS, Cloudinary",
+
+  "Tools & Development": "e.g. Git, GitHub, Postman",
+
+  "AI / Machine Learning": "e.g. TensorFlow, OpenCV, MediaPipe",
+
+  "Programming Languages": "e.g. TypeScript, JavaScript, Python",
+
+  "Web Development": "e.g. REST API, Responsive Web Design",
+
+  "Testing & Other": "e.g. Software Testing, Debugging",
+
+  "Office & Productivity": "e.g. Microsoft Excel, Microsoft Word",
+
+  "Business & Office": "e.g. Bookkeeping, Data Entry",
+
+  Design: "e.g. Adobe Photoshop, Canva, UI/UX Design",
+
+  "Soft Skills": "e.g. Communication, Leadership, Teamwork",
+
+  Languages: "e.g. English, Filipino, Japanese",
+
+  Technical: "e.g. Hardware Troubleshooting, Networking",
 };

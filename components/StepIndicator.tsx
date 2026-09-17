@@ -13,6 +13,15 @@ export default function StepIndicator({
   currentStep,
   onStepClick,
 }: StepIndicatorProps) {
+  const handleStepClick = (step: WizardStep) => {
+    onStepClick?.(step);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="step-rail" role="list" aria-label="Resume builder progress">
       {steps.map((step, idx) => {
@@ -25,7 +34,7 @@ export default function StepIndicator({
             <button
               type="button"
               className="btn p-0 border-0 bg-transparent d-flex align-items-center gap-2"
-              onClick={() => onStepClick?.(step)}
+              onClick={() => handleStepClick(step)}
               disabled={!onStepClick}
               aria-current={isCurrent ? "step" : undefined}
               aria-label={`Go to Step ${idx + 1}: ${STEP_LABELS[step]}`}

@@ -1,310 +1,436 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import { ResumeData } from "@/types/resume";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Link,
+  Font,
+} from "@react-pdf/renderer";
 
-// Single-column, plain-text layout on purpose: no tables, columns, icons,
-// or text-inside-images. That's what lets an ATS parser read every field
-// correctly. Uses the built-in Helvetica font — no external font file
-// needed, and it's one of the safest fonts for ATS parsing.
+import { ResumeData, SkillEntry } from "@/types/resume";
+
+interface ResumePDFDocumentProps {
+  data: ResumeData;
+}
+
+Font.register({
+  family: "Helvetica",
+  fonts: [
+    {
+      src: "https://fonts.gstatic.com/s/helvetica/v1/Helvetica.ttf",
+      fontWeight: "normal",
+    },
+    {
+      src: "https://fonts.gstatic.com/s/helvetica/v1/Helvetica-Bold.ttf",
+      fontWeight: "bold",
+    },
+  ],
+});
+
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    paddingTop: 42,
+    paddingBottom: 42,
+    paddingLeft: 48,
+    paddingRight: 48,
     fontFamily: "Helvetica",
-    fontSize: 10,
-    color: "#1a1a1a",
+    fontSize: 9.5,
+    lineHeight: 1.4,
+    color: "#111111",
   },
-  name: {
-    fontSize: 20,
-    fontFamily: "Helvetica-Bold",
-    marginBottom: 2,
-  },
-  jobTitle: {
-    fontSize: 12,
-    color: "#333333",
-    marginBottom: 6,
-  },
-  contactLine: {
-    fontSize: 9,
-    color: "#333333",
+
+  header: {
+    borderBottomWidth: 1.5,
+    borderBottomColor: "#111111",
+    paddingBottom: 10,
     marginBottom: 14,
   },
-  sectionTitle: {
-    fontSize: 10,
+
+  name: {
     fontFamily: "Helvetica-Bold",
-    textTransform: "uppercase",
-    borderBottomWidth: 1,
-    borderBottomColor: "#1a1a1a",
-    paddingBottom: 3,
-    marginTop: 14,
-    marginBottom: 6,
-    letterSpacing: 1,
-  },
-  paragraph: {
-    fontSize: 10,
-    lineHeight: 1.4,
-    marginBottom: 4,
-  },
-  entryBlock: {
-    marginBottom: 8,
-  },
-  entryTitleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  entryTitle: {
-    fontSize: 10.5,
-    fontFamily: "Helvetica-Bold",
-  },
-  entryDates: {
-    fontSize: 9,
-    color: "#444444",
-  },
-  entrySub: {
-    fontSize: 9.5,
-    color: "#333333",
+    fontSize: 20,
     marginBottom: 3,
   },
-  bulletRow: {
-    flexDirection: "row",
-    marginBottom: 2,
+
+  jobTitle: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 11,
+    marginBottom: 5,
   },
-  bulletDot: {
-    width: 10,
-    fontSize: 10,
+
+  contact: {
+    fontSize: 8.5,
+    lineHeight: 1.5,
   },
-  bulletText: {
+
+  section: {
+    marginBottom: 12,
+  },
+
+  sectionTitle: {
+    fontFamily: "Helvetica-Bold",
+    fontSize: 10.5,
+    borderBottomWidth: 0.7,
+    borderBottomColor: "#555555",
+    paddingBottom: 3,
+    marginBottom: 6,
+  },
+
+  paragraph: {
+    fontFamily: "Helvetica",
     fontSize: 9.5,
-    flex: 1,
     lineHeight: 1.4,
   },
-  skillsLine: {
+
+  entry: {
+    marginBottom: 8,
+  },
+
+  entryHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+
+  entryMain: {
+    flex: 1,
+    paddingRight: 12,
+  },
+
+  entryTitle: {
+    fontFamily: "Helvetica-Bold",
     fontSize: 9.5,
-    lineHeight: 1.5,
+  },
+
+  entrySubtitle: {
+    fontFamily: "Helvetica-Bold",
+    marginTop: 1,
+    fontSize: 9,
+  },
+
+  entryMeta: {
+    fontFamily: "Helvetica",
+    fontSize: 8,
+    textAlign: "right",
+    maxWidth: 150,
+  },
+
+  entryDescription: {
+    marginTop: 3,
+    fontFamily: "Helvetica",
+    fontSize: 9,
+    lineHeight: 1.35,
+  },
+
+  skillLine: {
+    marginBottom: 3,
+    fontFamily: "Helvetica",
+    fontSize: 9,
+    lineHeight: 1.35,
+  },
+
+  skillCategory: {
+    fontFamily: "Helvetica-Bold",
+  },
+
+  technologies: {
+    fontFamily: "Helvetica-Bold",
+  },
+
+  link: {
+    fontFamily: "Helvetica",
+    color: "#111111",
+    textDecoration: "none",
+    fontSize: 8.5,
   },
 });
 
-function ContactLine({ data }: { data: ResumeData }) {
-  const { email, phone, location, linkedin, portfolio } = data.personalInfo;
-  const parts = [email, phone, location, linkedin, portfolio].filter(Boolean);
-  return <Text style={styles.contactLine}>{parts.join("  |  ")}</Text>;
-}
+export default function ResumePDFDocument({ data }: ResumePDFDocumentProps) {
+  const personalInfo = data.personalInfo;
 
-function bulletsFromDescription(description: string) {
-  return description
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
-}
+  const skillsByCategory = data.skills.reduce<Record<string, SkillEntry[]>>(
+    (groups, skill) => {
+      const category = skill.category?.trim() || "Technical";
 
-export default function ResumePDFDocument({ data }: { data: ResumeData }) {
-  const {
-    personalInfo,
-    experience,
-    internship,
-    education,
-    skills,
-    hasExperience,
-    projects,
-    certifications,
-    trainings,
-  } = data;
+      if (!groups[category]) {
+        groups[category] = [];
+      }
 
-  const skillsByCategory = {
-    technical: skills.filter((s) => s.category === "technical"),
-    soft: skills.filter((s) => s.category === "soft"),
-    language: skills.filter((s) => s.category === "language"),
+      groups[category].push(skill);
+
+      return groups;
+    },
+    {},
+  );
+
+  const formatDateRange = (start?: string, end?: string) => {
+    if (!start && !end) {
+      return "";
+    }
+
+    if (start && end) {
+      return `${start} - ${end}`;
+    }
+
+    return start || end || "";
   };
 
   return (
-    <Document title={`${personalInfo.fullName} - Resume`}>
+    <Document>
+      {" "}
       <Page size="A4" style={styles.page}>
-        <Text style={styles.name}>{personalInfo.fullName}</Text>
-        {personalInfo.jobTitle ? (
-          <Text style={styles.jobTitle}>{personalInfo.jobTitle}</Text>
-        ) : null}
-        <ContactLine data={data} />
+        {" "}
+        <View style={styles.header}>
+          {" "}
+          <Text style={styles.name}>
+            {personalInfo.fullName || "Your Name"}{" "}
+          </Text>
+          ```
+          {personalInfo.jobTitle && (
+            <Text style={styles.jobTitle}>{personalInfo.jobTitle}</Text>
+          )}
+          <Text style={styles.contact}>
+            {[
+              personalInfo.email,
+              personalInfo.phone,
+              personalInfo.location,
+              personalInfo.linkedin,
+              personalInfo.github,
+              personalInfo.portfolio,
+            ]
+              .filter(Boolean)
+              .join(" | ")}
+          </Text>
+        </View>
+        {personalInfo.summary && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>PROFESSIONAL SUMMARY</Text>
 
-        {personalInfo.summary ? (
-          <View>
-            <Text style={styles.sectionTitle}>Professional Summary</Text>
             <Text style={styles.paragraph}>{personalInfo.summary}</Text>
           </View>
-        ) : null}
+        )}
+        {data.experience.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>WORK EXPERIENCE</Text>
 
-        {hasExperience === "yes" && experience.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Work Experience</Text>
-            {experience.map((exp) => (
-              <View key={exp.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>
-                    {exp.position} — {exp.company}
-                  </Text>
-                  <Text style={styles.entryDates}>
-                    {exp.startDate} – {exp.endDate}
-                  </Text>
-                </View>
-                {exp.location ? (
-                  <Text style={styles.entrySub}>{exp.location}</Text>
-                ) : null}
-                {bulletsFromDescription(exp.description).map((line, i) => (
-                  <View style={styles.bulletRow} key={i}>
-                    <Text style={styles.bulletDot}>•</Text>
-                    <Text style={styles.bulletText}>{line}</Text>
+            {data.experience.map((entry) => (
+              <View key={entry.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{entry.position}</Text>
+
+                    <Text style={styles.entrySubtitle}>{entry.company}</Text>
                   </View>
-                ))}
-              </View>
-            ))}
-          </View>
-        ) : null}
 
-        {internship.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Internship / OJT</Text>
-            {internship.map((intern) => (
-              <View key={intern.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>
-                    {intern.position} — {intern.company}
-                  </Text>
-                  <Text style={styles.entryDates}>
-                    {intern.startDate} – {intern.endDate}
-                  </Text>
-                </View>
-                {intern.department || intern.location ? (
-                  <Text style={styles.entrySub}>
-                    {[intern.department, intern.location]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </Text>
-                ) : null}
-                {bulletsFromDescription(intern.description).map((line, i) => (
-                  <View style={styles.bulletRow} key={i}>
-                    <Text style={styles.bulletDot}>•</Text>
-                    <Text style={styles.bulletText}>{line}</Text>
+                  <View style={styles.entryMeta}>
+                    <Text>
+                      {formatDateRange(entry.startDate, entry.endDate)}
+                    </Text>
+
+                    {entry.location && <Text>{entry.location}</Text>}
                   </View>
-                ))}
+                </View>
+
+                {entry.description && (
+                  <Text style={styles.entryDescription}>
+                    {entry.description}
+                  </Text>
+                )}
               </View>
             ))}
           </View>
-        ) : null}
+        )}
+        {data.internship.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>INTERNSHIP / OJT</Text>
 
-        {education.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Education</Text>
-            {education.map((edu) => (
-              <View key={edu.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>{edu.degree}</Text>
-                  <Text style={styles.entryDates}>
-                    {edu.startDate} – {edu.endDate}
-                  </Text>
+            {data.internship.map((entry) => (
+              <View key={entry.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{entry.position}</Text>
+
+                    <Text style={styles.entrySubtitle}>{entry.company}</Text>
+
+                    {entry.department && (
+                      <Text>Department: {entry.department}</Text>
+                    )}
+                  </View>
+
+                  <View style={styles.entryMeta}>
+                    <Text>
+                      {formatDateRange(entry.startDate, entry.endDate)}
+                    </Text>
+
+                    {entry.location && <Text>{entry.location}</Text>}
+                  </View>
                 </View>
-                <Text style={styles.entrySub}>
-                  {edu.school}
-                  {edu.honors ? `  ·  ${edu.honors}` : ""}
+
+                {entry.description && (
+                  <Text style={styles.entryDescription}>
+                    {entry.description}
+                  </Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+        {data.education.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>EDUCATION</Text>
+
+            {data.education.map((entry) => (
+              <View key={entry.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{entry.degree}</Text>
+
+                    <Text style={styles.entrySubtitle}>{entry.school}</Text>
+
+                    {entry.honors && <Text>{entry.honors}</Text>}
+                  </View>
+
+                  <View style={styles.entryMeta}>
+                    <Text>
+                      {formatDateRange(entry.startDate, entry.endDate)}
+                    </Text>
+
+                    {entry.location && <Text>{entry.location}</Text>}
+                  </View>
+                </View>
+
+                {entry.summary && (
+                  <Text style={styles.entryDescription}>{entry.summary}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+        {data.skills.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>SKILLS</Text>
+
+            {Object.entries(skillsByCategory).map(
+              ([categoryName, categorySkills]) => (
+                <Text key={categoryName} style={styles.skillLine}>
+                  <Text style={styles.skillCategory}>{categoryName}:</Text>{" "}
+                  {categorySkills.map((skill) => skill.name).join(", ")}
                 </Text>
-                {edu.summary ? (
-                  <Text style={styles.paragraph}>{edu.summary}</Text>
-                ) : null}
-              </View>
-            ))}
-          </View>
-        ) : null}
-
-        {skills.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Skills</Text>
-            {skillsByCategory.technical.length > 0 && (
-              <Text style={styles.skillsLine}>
-                Technical:{" "}
-                {skillsByCategory.technical.map((s) => s.name).join(", ")}
-              </Text>
-            )}
-            {skillsByCategory.soft.length > 0 && (
-              <Text style={styles.skillsLine}>
-                Soft Skills:{" "}
-                {skillsByCategory.soft.map((s) => s.name).join(", ")}
-              </Text>
-            )}
-            {skillsByCategory.language.length > 0 && (
-              <Text style={styles.skillsLine}>
-                Languages:{" "}
-                {skillsByCategory.language.map((s) => s.name).join(", ")}
-              </Text>
+              ),
             )}
           </View>
-        ) : null}
+        )}
+        {data.projects.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>PROJECTS</Text>
 
-        {projects.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Projects</Text>
-            {projects.map((proj) => (
-              <View key={proj.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>{proj.name}</Text>
-                  {proj.date ? (
-                    <Text style={styles.entryDates}>{proj.date}</Text>
-                  ) : null}
+            {data.projects.map((project) => (
+              <View key={project.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{project.name}</Text>
+
+                    {project.role && (
+                      <Text style={styles.entrySubtitle}>{project.role}</Text>
+                    )}
+
+                    {project.organization && (
+                      <Text>{project.organization}</Text>
+                    )}
+                  </View>
+
+                  {project.date && (
+                    <Text style={styles.entryMeta}>{project.date}</Text>
+                  )}
                 </View>
-                {proj.role || proj.organization ? (
-                  <Text style={styles.entrySub}>
-                    {[proj.role, proj.organization].filter(Boolean).join(" · ")}
+
+                {project.description && (
+                  <Text style={styles.entryDescription}>
+                    {project.description}
                   </Text>
-                ) : null}
-                {proj.description ? (
-                  <Text style={styles.paragraph}>{proj.description}</Text>
-                ) : null}
-                {proj.skillsUsed ? (
-                  <Text style={styles.skillsLine}>
-                    Skills/Tools: {proj.skillsUsed}
+                )}
+
+                {project.skillsUsed && (
+                  <Text style={styles.entryDescription}>
+                    <Text style={styles.technologies}>Technologies:</Text>{" "}
+                    {project.skillsUsed}
                   </Text>
-                ) : null}
-              </View>
-            ))}
-          </View>
-        ) : null}
+                )}
 
-        {certifications.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Certifications</Text>
-            {certifications.map((cert) => (
-              <View key={cert.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>{cert.name}</Text>
-                  {cert.issueDate ? (
-                    <Text style={styles.entryDates}>{cert.issueDate}</Text>
-                  ) : null}
-                </View>
-                <Text style={styles.entrySub}>
-                  {cert.issuer}
-                  {cert.credentialId ? `  ·  ID: ${cert.credentialId}` : ""}
-                </Text>
+                {project.url && (
+                  <Link src={project.url} style={styles.link}>
+                    {project.url}
+                  </Link>
+                )}
               </View>
             ))}
           </View>
-        ) : null}
+        )}
+        {data.certifications.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>CERTIFICATIONS</Text>
 
-        {trainings.length > 0 ? (
-          <View>
-            <Text style={styles.sectionTitle}>Training &amp; Workshops</Text>
-            {trainings.map((training) => (
-              <View key={training.id} style={styles.entryBlock} wrap={false}>
-                <View style={styles.entryTitleRow}>
-                  <Text style={styles.entryTitle}>{training.name}</Text>
-                  {training.date ? (
-                    <Text style={styles.entryDates}>{training.date}</Text>
-                  ) : null}
+            {data.certifications.map((entry) => (
+              <View key={entry.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{entry.name}</Text>
+
+                    <Text style={styles.entrySubtitle}>{entry.issuer}</Text>
+                  </View>
+
+                  {entry.issueDate && (
+                    <Text style={styles.entryMeta}>{entry.issueDate}</Text>
+                  )}
                 </View>
-                {training.provider ? (
-                  <Text style={styles.entrySub}>{training.provider}</Text>
-                ) : null}
-                {training.description ? (
-                  <Text style={styles.paragraph}>{training.description}</Text>
-                ) : null}
+
+                {entry.expirationDate && (
+                  <Text>Expiration: {entry.expirationDate}</Text>
+                )}
+
+                {entry.credentialId && (
+                  <Text>Credential ID: {entry.credentialId}</Text>
+                )}
+
+                {entry.credentialUrl && (
+                  <Link src={entry.credentialUrl} style={styles.link}>
+                    {entry.credentialUrl}
+                  </Link>
+                )}
               </View>
             ))}
           </View>
-        ) : null}
+        )}
+        {data.trainings.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>TRAINING</Text>
+
+            {data.trainings.map((entry) => (
+              <View key={entry.id} style={styles.entry}>
+                <View style={styles.entryHeader}>
+                  <View style={styles.entryMain}>
+                    <Text style={styles.entryTitle}>{entry.name}</Text>
+
+                    {entry.provider && (
+                      <Text style={styles.entrySubtitle}>{entry.provider}</Text>
+                    )}
+                  </View>
+
+                  {entry.date && (
+                    <Text style={styles.entryMeta}>{entry.date}</Text>
+                  )}
+                </View>
+
+                {entry.description && (
+                  <Text style={styles.entryDescription}>
+                    {entry.description}
+                  </Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
       </Page>
     </Document>
   );
