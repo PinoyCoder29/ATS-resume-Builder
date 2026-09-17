@@ -7,84 +7,63 @@ export const CATEGORY_LABELS: Record<SkillCategory, string> = {
 };
 
 export const CATEGORY_PLACEHOLDERS: Record<SkillCategory, string> = {
-  technical: "e.g. Next.js, Microsoft Excel, Bookkeeping",
+  technical: "e.g. React, Next.js, PostgreSQL",
   soft: "e.g. Communication, Leadership",
   language: "e.g. English, Filipino, Japanese",
 };
 
-export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
-  technical: [
-    // Frontend
-    "Next.js",
+/*
+|--------------------------------------------------------------------------
+| Technical Skill Groups
+|--------------------------------------------------------------------------
+*/
+
+export const TECHNICAL_SKILL_GROUPS = {
+  "Frontend Development": [
     "React",
+    "Next.js",
     "TypeScript",
     "JavaScript",
     "HTML5",
     "CSS3",
     "Bootstrap",
     "Tailwind CSS",
+    "Vue.js",
+  ],
 
-    // Backend
-    "Node.js",
-    "Express.js",
-    "FastAPI",
-    "Nodemailer",
+  "Backend Development": ["Node.js", "Express.js", "FastAPI", "Nodemailer"],
 
-    // Databases & ORM
-    "PostgreSQL",
-    "MySQL",
-    "SQL",
-    "Prisma ORM",
-    "Redis",
+  "Databases & ORM": ["PostgreSQL", "MySQL", "SQL", "Prisma ORM", "Redis"],
 
-    // Cloud & Deployment
-    "Vercel",
-    "Neon",
-    "Cloudinary",
-    "Hugging Face",
+  "Cloud & Deployment": ["Vercel", "Neon", "Cloudinary", "Hugging Face"],
 
-    // Programming Languages
-    "Python",
-    "Python (Basic)",
-    "Java",
-    "Java (Basic)",
+  "Tools & Development": [
+    "Git",
+    "GitHub",
+    "Postman",
+    "Visual Studio Code",
+    "XAMPP",
+  ],
 
-    // AI / Machine Learning
+  "AI / Machine Learning": [
     "TensorFlow",
     "PyTorch",
     "OpenCV",
     "MediaPipe",
     "GRU",
     "MobileNetV2",
+  ],
 
-    // Development Tools
-    "Git",
-    "GitHub",
-    "Postman",
-    "Visual Studio Code",
-    "XAMPP",
+  "Programming Languages": [
+    "TypeScript",
+    "JavaScript",
+    "Python",
+    "Python (Basic)",
+    "Java",
+    "Java (Basic)",
+  ],
 
-    // Microsoft Office / Productivity
-    "Microsoft Excel",
-    "Microsoft Word",
-    "Microsoft PowerPoint",
-    "Google Docs",
-    "Google Sheets",
-    "Google Workspace",
-
-    // Business / Office Skills
-    "Bookkeeping",
-    "Data Entry",
-    "Data Management",
-    "Document Management",
-    "File Management",
-
-    // Design
-    "Adobe Photoshop",
-    "Canva",
-    "UI/UX Design",
-
-    // Web Development
+  "Web Development": [
     "REST API",
     "API Integration",
     "Responsive Web Design",
@@ -92,13 +71,43 @@ export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
     "Frontend Development",
     "Backend Development",
     "Full-Stack Development",
+  ],
 
-    // Other
-    "Technical Documentation",
-    "Debugging",
+  "Testing & Other": [
     "Software Testing",
+    "Debugging",
+    "Technical Documentation",
     "Problem Solving",
   ],
+
+  "Office & Productivity": [
+    "Microsoft Excel",
+    "Microsoft Word",
+    "Microsoft PowerPoint",
+    "Google Docs",
+    "Google Sheets",
+    "Google Workspace",
+  ],
+
+  "Business & Office": [
+    "Bookkeeping",
+    "Data Entry",
+    "Data Management",
+    "Document Management",
+    "File Management",
+  ],
+
+  Design: ["Adobe Photoshop", "Canva", "UI/UX Design"],
+} as const;
+
+/*
+|--------------------------------------------------------------------------
+| General Quick Examples
+|--------------------------------------------------------------------------
+*/
+
+export const CATEGORY_EXAMPLES: Record<SkillCategory, string[]> = {
+  technical: Object.values(TECHNICAL_SKILL_GROUPS).flat(),
 
   soft: [
     "Communication",
