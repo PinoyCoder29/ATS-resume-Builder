@@ -7,21 +7,34 @@ import ResumePreview from "@/components/resume/ResumePreview";
 import DownloadPdfButton from "@/components/resume/DownloadPdfButton";
 
 export default function PreviewStep() {
-  const { data, goBack } = useResume();
+  const { data, goBack, resetAll } = useResume();
   const [showDownload, setShowDownload] = useState(false);
 
   const handleContinue = () => {
     setShowDownload(true);
   };
 
+  const handleStartNewResume = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to start a new resume? Your current resume data will be cleared.",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    resetAll();
+  };
+
   if (showDownload) {
     return (
       <div className="panel">
-        {" "}
-        <h2 className="panel-title">Resume Ready </h2>
+        <h2 className="panel-title">Resume Ready</h2>
+
         <p className="panel-subtitle">
           Your resume is ready. You can now download your PDF.
         </p>
+
         <div className="border rounded p-4 bg-light text-center">
           <h4 className="mb-3">Your resume is ready!</h4>
 
@@ -30,7 +43,20 @@ export default function PreviewStep() {
           </p>
 
           <DownloadPdfButton data={data} />
+
+          <div className="mt-4 pt-3 border-top">
+            <p className="text-muted mb-2">Want to create another resume?</p>
+
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={handleStartNewResume}
+            >
+              + Create New Resume
+            </button>
+          </div>
         </div>
+
         <div className="mt-4">
           <button
             type="button"
@@ -46,9 +72,10 @@ export default function PreviewStep() {
 
   return (
     <div className="panel">
-      {" "}
-      <h2 className="panel-title">Preview & Download </h2>
+      <h2 className="panel-title">Preview & Download</h2>
+
       <p className="panel-subtitle">Preview your resume before downloading.</p>
+
       <div
         style={{
           overflowX: "auto",
@@ -58,6 +85,7 @@ export default function PreviewStep() {
       >
         <ResumePreview data={data} />
       </div>
+
       <FormNav onBack={goBack} onNext={handleContinue} nextDisabled={false} />
     </div>
   );
