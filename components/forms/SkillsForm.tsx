@@ -26,14 +26,25 @@ export default function SkillsForm() {
     );
   };
 
-  const addSkillToResume = (skillName: string) => {
+  const getSkillId = (skillName: string) => {
+    const skill = skills.find(
+      (item) => item.name.toLowerCase() === skillName.toLowerCase(),
+    );
+
+    return skill?.id;
+  };
+
+  const toggleSuggestedSkill = (skillName: string) => {
     const trimmedName = skillName.trim();
 
     if (!trimmedName) {
       return;
     }
 
-    if (skillExists(trimmedName)) {
+    const existingSkillId = getSkillId(trimmedName);
+
+    if (existingSkillId) {
+      removeSkill(existingSkillId);
       return;
     }
 
@@ -45,7 +56,20 @@ export default function SkillsForm() {
   };
 
   const handleAddCustomSkill = () => {
-    addSkillToResume(customSkill);
+    const trimmedName = customSkill.trim();
+
+    if (!trimmedName) {
+      return;
+    }
+
+    if (!skillExists(trimmedName)) {
+      addSkill({
+        id: crypto.randomUUID(),
+        name: trimmedName,
+        category: categoryName as any,
+      });
+    }
+
     setCustomSkill("");
   };
 
@@ -58,6 +82,18 @@ export default function SkillsForm() {
     }
   };
 
+  const groupedSkills: Record<string, typeof skills> = {};
+
+  skills.forEach((skill) => {
+    const category = skill.category?.trim() || "Technical";
+
+    if (!groupedSkills[category]) {
+      groupedSkills[category] = [];
+    }
+
+    groupedSkills[category].push(skill);
+  });
+
   const canContinue = skills.length > 0;
 
   return (
@@ -68,6 +104,7 @@ export default function SkillsForm() {
         Select a category and add the skills that best describe your experience.
       </p>
 
+      {/* Skill Category */}
       <div className="mb-4">
         <label htmlFor="skillCategory" className="form-label fw-semibold">
           Skill Category
@@ -89,31 +126,84 @@ export default function SkillsForm() {
         </select>
       </div>
 
+      {/* Suggested Skills */}
       <div className="mb-4">
         <label className="form-label fw-semibold">Suggested Skills</label>
 
         <div className="d-flex flex-wrap gap-2">
-          {SKILL_CATEGORIES[categoryName].map((skill) => {
-            const alreadyAdded = skillExists(skill);
+          {SKILL_CATEGORIES[categoryName].length === 0 ? (
+            <div className="text-muted">
+              No suggested skills for this category.
+            </div>
+          ) : (
+            SKILL_CATEGORIES[categoryName].map((skill) => {
+              const alreadyAdded = skillExists(skill);
 
-            return (
-              <button
-                key={skill}
-                type="button"
-                className={`btn ${
-                  alreadyAdded ? "btn-dark" : "btn-outline-secondary"
-                }`}
-                onClick={() => addSkillToResume(skill)}
-                disabled={alreadyAdded}
-              >
-                {alreadyAdded ? "✓ " : "+ "}
-                {skill}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={skill}
+                  type="button"
+                  className={`btn ${
+                    alreadyAdded ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => toggleSuggestedSkill(skill)}
+                >
+                  {alreadyAdded ? "✓ " : "+ "}
+                  {skill}
+                </button>
+              );
+            })
+          )}
         </div>
       </div>
 
+      {/* Selected Skills */}
+      {skills.length > 0 && (
+        <div className="mb-4">
+          <label className="form-label fw-semibold">Selected Skills</label>
+
+          <div className="d-flex flex-column gap-3">
+            {Object.entries(groupedSkills).map(([category, categorySkills]) => (
+              <div key={category}>
+                <div className="small fw-semibold text-secondary mb-2">
+                  {category}
+                </div>
+
+                <div className="d-flex flex-wrap gap-2">
+                  {categorySkills.map((skill) => (
+                    <div
+                      key={skill.id}
+                      className="d-inline-flex align-items-center bg-dark text-white rounded px-3 py-2"
+                    >
+                      <span>{skill.name}</span>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm text-white p-0 ms-2"
+                        onClick={() => removeSkill(skill.id)}
+                        aria-label={`Remove ${skill.name}`}
+                        style={{
+                          lineHeight: 1,
+                          fontSize: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="small text-muted mt-3">
+            {skills.length} skill
+            {skills.length !== 1 ? "s" : ""} selected
+          </div>
+        </div>
+      )}
+
+      {/* Custom Skill */}
       <div className="mb-4">
         <label htmlFor="customSkill" className="form-label fw-semibold">
           Add Custom Skill
@@ -141,54 +231,7 @@ export default function SkillsForm() {
         </div>
       </div>
 
-      <div className="mb-4">
-        <label className="form-label fw-semibold">Selected Skills</label>
-
-        {skills.length === 0 ? (
-          <div className="border rounded p-4 text-center text-muted">
-            No skills added yet.
-          </div>
-        ) : (
-          <div className="border rounded p-3">
-            {Object.entries(
-              skills.reduce((groups: Record<string, typeof skills>, skill) => {
-                const category = String(skill.category);
-
-                if (!groups[category]) {
-                  groups[category] = [];
-                }
-
-                groups[category].push(skill);
-
-                return groups;
-              }, {}),
-            ).map(([category, categorySkills]) => (
-              <div key={category} className="mb-3">
-                <div className="fw-semibold mb-2">{category}</div>
-
-                <div className="d-flex flex-wrap gap-2">
-                  {categorySkills.map((skill) => (
-                    <span
-                      key={skill.id}
-                      className="badge bg-dark d-flex align-items-center gap-2"
-                    >
-                      {skill.name}
-
-                      <button
-                        type="button"
-                        className="btn-close btn-close-white"
-                        aria-label={`Remove ${skill.name}`}
-                        onClick={() => removeSkill(skill.id)}
-                      />
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+      {/* Navigation */}
       <FormNav onBack={goBack} onNext={goNext} nextDisabled={!canContinue} />
     </div>
   );
